@@ -1,0 +1,174 @@
+/* ==========================================================================
+   Escolarize — responsividade (tablet e desktop)
+   Abordagem mobile-first: este arquivo apenas adiciona/ajusta estilos a
+   partir dos breakpoints definidos.
+   ========================================================================== */
+
+/* ---------- Tablet (768px+) ----------
+   O app vira uma coluna central destacada do fundo da página. */
+@media (min-width: 768px) {
+  body { background: var(--color-page); }
+
+  .app-shell {
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--color-bg);
+    box-shadow: var(--shadow-lg);
+    min-height: 100vh;
+  }
+
+  .bottom-nav {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: 640px;
+    max-width: 100%;
+  }
+
+  .services-grid { grid-template-columns: repeat(4, 1fr); }
+  .toast-container { width: min(90%, 420px); }
+}
+
+/* ---------- Desktop (1024px+) ----------
+   Sidebar fixa à esquerda + coluna de conteúdo centralizada.
+   O posicionamento no grid é explícito para que a navegação possa ser
+   ocultada (telas de fluxo) sem deslocar o conteúdo. */
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    justify-content: center;
+    background: var(--color-page);
+  }
+
+  .app-shell {
+    max-width: 1200px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    align-items: start;
+    background: var(--color-bg);
+    box-shadow: var(--shadow-lg);
+    min-height: 100vh;
+  }
+
+  .bottom-nav {
+    grid-column: 1;
+    grid-row: 1;
+    position: sticky;
+    top: 0;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    transform: none;
+    width: auto;
+    max-width: none;
+    height: 100vh;
+    align-self: start;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 6px;
+    padding: 28px 16px 0;
+    border-top: none;
+    border-right: 1px solid var(--color-border);
+    box-shadow: none;
+    background: var(--color-surface);
+  }
+
+  /* nas telas de fluxo a navegação continua visível no desktop */
+  .bottom-nav-hidden { display: flex; }
+
+  .nav-item {
+    flex: none;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .nav-item:hover { background: var(--color-bg); }
+  .nav-item.active { background: rgba(25, 118, 210, 0.1); }
+  .nav-item:active { transform: none; }
+
+  .view-root {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 8px 24px 56px;
+  }
+  .has-bottom-nav .view-root { padding-bottom: 56px; }
+
+  .toast-container { bottom: 28px; left: auto; right: 32px; transform: none; }
+
+  .modal-dialog {
+    bottom: auto;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: var(--radius-lg);
+  }
+  @keyframes modalSlideUp {
+    from { transform: translate(-50%, -46%); opacity: 0; }
+    to { transform: translate(-50%, -50%); opacity: 1; }
+  }
+
+  /* Home em duas colunas: conteúdo à esquerda, mapa/segurança à direita */
+  .home-columns {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .home-main { flex: 1 1 58%; min-width: 0; gap: 20px; }
+  .home-aside {
+    flex: 1 1 42%;
+    order: 1; /* conteúdo principal à esquerda, mapa à direita */
+    min-width: 0;
+    position: sticky;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .home-map-wrap { padding: 0; }
+  .home-view .fake-map { height: 300px; }
+  .safety-banner { width: 100%; margin: 0; }
+  .main-card, .promo-banner { margin: 0; }
+  .home-section { margin: 0; }
+
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Ações principais não esticam por toda a largura no desktop */
+  .sticky-action { max-width: 460px; margin-left: auto; margin-right: auto; }
+
+  /* Listas e cartões mantêm largura de leitura confortável */
+  .topbar, .school-list, .ride-list, .schedule-list,
+  .review-card, .rating-card, .tracking-sheet,
+  .profile-menu, .profile-preferences, .profile-stats,
+  .address-field, .saved-address-list, .use-location-btn,
+  .form-field, .form-row, .search-field, .list-subheading,
+  .mock-disclaimer, .prototype-notice, .tracking-map-wrap {
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .use-location-btn { width: 100%; }
+  .tracking-sheet { margin-top: -24px; }
+  .empty-state { max-width: 620px; margin: 0 auto; }
+}
+
+/* ---------- Telas largas (1400px+) ---------- */
+@media (min-width: 1400px) {
+  .home-view .fake-map { height: 340px; }
+}
+
+/* ---------- Preferência por movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
