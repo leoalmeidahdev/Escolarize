@@ -314,7 +314,9 @@ const Components = (function () {
       "</div>" +
       '<div class="ride-card-driver">' +
       '<span class="avatar avatar-sm">' + escapeHtml(ride.driver.initials) + "</span>" +
-      "<span>" + escapeHtml(ride.driver.name) + "</span>" +
+      "<span>" + escapeHtml(ride.driver.name) +
+      (ride.driver.role ? '<span class="ride-card-driver-role">' + escapeHtml(ride.driver.role) + "</span>" : "") +
+      "</span>" +
       (ride.rating
         ? '<span class="ride-card-rating">' + icon("starFilled", "star-filled") + ride.rating + "</span>"
         : '<span class="ride-card-rating ride-card-rating-empty">Não avaliada</span>') +
@@ -329,8 +331,14 @@ const Components = (function () {
       '<div class="driver-card">' +
       '<span class="avatar avatar-lg avatar-driver">' + escapeHtml(driver.initials) + "</span>" +
       '<div class="driver-card-info">' +
-      '<div class="driver-card-name">' + escapeHtml(driver.name) + "</div>" +
+      '<div class="driver-card-name">' + escapeHtml(driver.name) +
+      (driver.role
+        ? '<span class="badge badge-role badge-role-' + (driver.roleType || "responsavel") + '">' +
+          escapeHtml(driver.role) + "</span>"
+        : "") +
+      "</div>" +
       '<div class="driver-card-rating">' + icon("starFilled", "star-filled") + driver.rating + " • " + driver.trips + " corridas</div>" +
+      (driver.roleDetail ? '<div class="driver-card-role-detail">' + escapeHtml(driver.roleDetail) + "</div>" : "") +
       '<div class="driver-card-vehicle">' + escapeHtml(driver.vehicle) + " " + escapeHtml(driver.color) + " • <strong>" + escapeHtml(driver.plate) + "</strong></div>" +
       "</div>" +
       (opts.showContact

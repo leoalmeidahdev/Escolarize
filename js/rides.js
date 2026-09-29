@@ -101,6 +101,13 @@ const RidesView = (function () {
       "</div>" +
       "</div>" +
 
+      '<a class="gmaps-route-link" target="_blank" rel="noopener" href="' +
+      "https://www.google.com/maps/dir/?api=1&origin=" +
+      encodeURIComponent(address) +
+      "&destination=" +
+      encodeURIComponent(school.name + " " + school.address + " São José dos Campos SP") +
+      '">' + icon("compass") + "Ver trajeto no Google Maps</a>" +
+
       '<p class="mock-disclaimer">Distância, tempo e motorista são simulados neste protótipo.</p>' +
 
       '<div class="sticky-action sticky-action-double">' +
@@ -149,7 +156,7 @@ const RidesView = (function () {
       price: computePrice(school.distanceKm),
       status: "SEARCHING",
       createdAt: new Date().toISOString(),
-      driver: MockData.driver,
+      driver: MockData.getRandomDriver(),
       rating: null
     };
 
@@ -207,7 +214,6 @@ const RidesView = (function () {
           '<div class="spinner" aria-hidden="true"></div>' +
           "<h2>Procurando motorista…</h2>" +
           "<p>Estamos localizando o motorista mais próximo para sua corrida.</p>" +
-          renderDevSkip() +
           "</div>"
         );
 
@@ -217,7 +223,6 @@ const RidesView = (function () {
           '<div class="status-icon status-icon-success">' + icon("check") + "</div>" +
           "<h2>Motorista encontrado!</h2>" +
           Components.renderDriverCard(ride.driver) +
-          renderDevSkip() +
           "</div>"
         );
 
@@ -227,7 +232,6 @@ const RidesView = (function () {
           "<h2>" + Components.escapeHtml(ride.driver.name) + " está a caminho</h2>" +
           Components.renderDriverCard(ride.driver, { showContact: true }) +
           '<p class="tracking-eta">' + icon("clock") + " Chegada estimada: " + ride.driver.etaMin + " min</p>" +
-          renderDevSkip() +
           "</div>"
         );
 
@@ -238,7 +242,6 @@ const RidesView = (function () {
           Components.renderDriverCard(ride.driver, { showContact: true }) +
           "<p>" + Components.escapeHtml(ride.driver.name) + " está aguardando no endereço informado.</p>" +
           '<button type="button" class="btn btn-primary btn-block" id="start-ride-btn">Iniciar corrida</button>' +
-          renderDevSkip() +
           "</div>"
         );
 
@@ -264,7 +267,6 @@ const RidesView = (function () {
           '<span><strong>Destino</strong><span>' + Components.escapeHtml(ride.school.name) + "</span></span></div>" +
           "</div>" +
           Components.renderDriverCard(ride.driver) +
-          renderDevSkip() +
           "</div>"
         );
 
@@ -281,10 +283,6 @@ const RidesView = (function () {
       default:
         return "";
     }
-  }
-
-  function renderDevSkip() {
-    return '<button type="button" class="dev-skip-btn" id="dev-skip-btn">Pular etapa (demo)</button>';
   }
 
   function bindPanelEvents() {
@@ -304,9 +302,6 @@ const RidesView = (function () {
         });
       });
     }
-
-    const skipBtn = document.getElementById("dev-skip-btn");
-    if (skipBtn) skipBtn.addEventListener("click", devSkip);
   }
 
   function setStatus(status) {
@@ -384,17 +379,6 @@ const RidesView = (function () {
     Storage.addRideToHistory(ride);
     Components.showToast("Corrida finalizada.", "success");
     AppNav.switchView("completed");
-  }
-
-  function devSkip() {
-    clearTimers();
-    const status = appState.currentRide.status;
-    if (status === "DRIVER_ARRIVED") startRide();
-    else if (status === "ARRIVED") finishRide();
-    else {
-      const idx = STATUS_FLOW.indexOf(status);
-      setStatus(STATUS_FLOW[idx + 1]);
-    }
   }
 
   function mountTracking() {

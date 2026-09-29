@@ -69,7 +69,7 @@ const ProfileView = (function () {
     Components.openModal({
       title: "Sobre o Escolarize",
       bodyHtml:
-        "<p>Escolarize é uma plataforma de mobilidade escolar para estudantes e responsáveis em São José dos Campos - SP.</p>" +
+        "<p>Escolarize é uma plataforma de caronas escolares em São José dos Campos - SP. As corridas são oferecidas por pessoas da própria comunidade escolar — responsáveis que já levam os filhos e professores que vão para a mesma escola todo dia — que aproveitam o trajeto para levar outros estudantes e complementar a renda.</p>" +
         "<p><strong>Protótipo demonstrativo</strong> — funcionalidades de transporte, pagamento e comunicação são simuladas. Não há backend, banco de dados ou login real neste projeto.</p>",
       actions: [{ label: "Fechar", variant: "primary" }]
     });

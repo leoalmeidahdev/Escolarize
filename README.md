@@ -4,6 +4,8 @@ Plataforma web de corridas escolares — um protótipo funcional para estudantes
 
 ## Objetivo
 
+A proposta: as caronas são oferecidas por pessoas da própria comunidade escolar — responsáveis que já levam os filhos e professores que vão para a mesma escola todos os dias — que aproveitam o trajeto para levar outros estudantes e complementar a renda.
+
 O Escolarize simula, de ponta a ponta, a experiência de um aplicativo real de mobilidade escolar: escolher uma escola, informar o endereço de embarque, revisar e solicitar uma corrida, acompanhar um motorista (mock) até a chegada na escola, concluir a corrida, avaliar o motorista e consultar o histórico. Também é possível favoritar escolas e agendar corridas com antecedência.
 
 **Este é um protótipo demonstrativo.** Não há backend, banco de dados, autenticação, pagamento real ou comunicação real com motoristas — tudo é simulado no navegador.
@@ -15,8 +17,9 @@ O Escolarize simula, de ponta a ponta, a experiência de um aplicativo real de m
 - JavaScript (ES6+, vanilla, sem frameworks)
 - `localStorage` para persistência local
 - PWA (manifest + Service Worker)
+- Leaflet + OpenStreetMap para o mapa real (biblioteca local, sem chave de API)
 
-Nenhuma dependência de backend, banco de dados, login ou API paga é utilizada. Os únicos recursos externos são a fonte Inter (Google Fonts, via CDN).
+Nenhuma dependência de backend, banco de dados, login ou API paga é utilizada. Recursos externos: a fonte Inter (Google Fonts) e os *tiles* do OpenStreetMap — ambos opcionais, com degradação graciosa quando indisponíveis.
 
 ## Estrutura de pastas
 
@@ -34,6 +37,8 @@ Nenhuma dependência de backend, banco de dados, login ou API paga é utilizada.
 ├── js/
 │   ├── app.js              # inicialização, estado global, tema, service worker
 │   ├── navigation.js       # roteador de views (SPA) e navegação inferior
+│   ├── map.js               # camada de mapa real (Leaflet/OSM, provedor trocável)
+│   ├── mapView.js           # tela de mapa: escolher escola / definir embarque
 │   ├── home.js              # tela inicial
 │   ├── schools.js           # seleção de escola e endereço de embarque
 │   ├── rides.js              # revisão, solicitação, acompanhamento, histórico
@@ -47,7 +52,8 @@ Nenhuma dependência de backend, banco de dados, login ou API paga é utilizada.
 │   └── schools.js           # escolas mock de São José dos Campos
 │
 └── assets/
-    └── icons/                # ícones do PWA (SVG)
+    ├── icons/                # ícones do PWA (SVG)
+    └── vendor/leaflet/        # Leaflet 1.9.4 local (mapa real, sem CDN)
 ```
 
 ## Como executar
@@ -79,12 +85,40 @@ Não existe tela de login: o app abre diretamente na Home com um usuário mockad
 Todos os dados abaixo são fictícios e existem apenas para demonstrar o protótipo:
 
 - **Usuário**: Leonardo (nome, e-mail e telefone fictícios).
-- **Motorista**: Rafael Martins, veículo, placa, avaliação e tempo de chegada — tudo simulado via `js/mockData.js`.
+- **Motoristas**: elenco de 6 motoristas fictícios em `MockData.drivers`. Cada um representa alguém da comunidade escolar que **já faz o trajeto todo dia** — 3 responsáveis (pai/mãe de aluno) e 3 professores — e leva estudantes como renda extra. Cada registro traz `roleType` (`responsavel` | `professor`), `role` (rótulo exibido) e `roleDetail` (vínculo com a escola), além de veículo, cor, placa, avaliação, corridas e tempo de chegada. A cada corrida solicitada, um deles é sorteado por `MockData.getRandomDriver()` e fica guardado na própria corrida — por isso o histórico mantém o motorista de cada viagem.
 - **Escolas**: 10 escolas de São José dos Campos com endereço, bairro e coordenadas simuladas de mapa, em `data/schools.js`.
 - **Preço e distância**: calculados por uma fórmula simples e claramente fictícia (`RidesView.computePrice`), sem relação com valores reais.
-- **Mapa**: totalmente ilustrativo (SVG + CSS), sem integração com serviços de mapas reais.
+- **Mapa da Home**: ilustrativo (SVG + CSS), usado como prévia leve e disponível offline. O mapa real fica na tela de Mapa (ver seção abaixo).
 
 Não há cadastro, edição, exclusão ou aprovação de motoristas/escolas — são apenas dados estáticos de demonstração.
+
+## Mapa real (Leaflet + OpenStreetMap)
+
+Além do mapa ilustrativo da Home, o app tem uma tela de **Mapa** com um mapa real e interativo de São José dos Campos, onde é possível:
+
+- ver a região inteira, com zoom e arrasto;
+- visualizar as 10 escolas como marcadores;
+- tocar em uma escola para ver nome/endereço e **escolhê-la como destino**;
+- alternar para o modo **“Definir embarque”** e tocar em qualquer ponto do mapa para definir o local de embarque;
+- abrir a escola ou o trajeto completo no **Google Maps** (links externos, sem chave).
+
+Entradas para o mapa: botão “Ver mapa completo” na Home, “Escolher pelo mapa” na lista de escolas e “Escolher no mapa” na tela de endereço.
+
+### Por que não a API JavaScript do Google Maps
+
+A API JavaScript do Google Maps exige **chave de API e conta de faturamento**, o que contraria o requisito do projeto de não depender de APIs com chave. A solução adotada usa **Leaflet + tiles do OpenStreetMap**, que não exigem chave nem cadastro.
+
+- **Leaflet 1.9.4** fica versionado localmente em `assets/vendor/leaflet/` (sem CDN), é carregado sob demanda ao abrir a tela de mapa e entra no cache do Service Worker — a interface do mapa abre até offline (apenas os *tiles* precisam de internet).
+- **Tiles**: `tile.openstreetmap.org`, com a atribuição obrigatória exibida no mapa.
+- **Endereço do ponto de embarque**: geocodificação reversa via **Nominatim** (OpenStreetMap, sem chave). Se a chamada falhar, o app cai graciosamente para as coordenadas do ponto.
+
+### Trocando de provedor de mapa
+
+Todo o acesso ao mapa está isolado em `js/map.js` (`MapService`), com a constante `PROVIDER` no topo. Para usar Google Maps, Mapbox ou outro serviço, basta implementar a mesma interface pública (`load`, `createMap`, `setPickupMarker`, `focusSchool`, `fitAllSchools`, `reverseGeocode`, `destroy`) — nenhuma tela precisa ser alterada.
+
+### Sobre as coordenadas das escolas
+
+Cada escola tem `lat`/`lng` em `data/schools.js`. São coordenadas **aproximadas do bairro**, suficientes para posicionar o marcador na região correta da cidade — não são o endereço exato conferido de cada unidade, coerente com a natureza de protótipo do projeto.
 
 ## `localStorage`
 

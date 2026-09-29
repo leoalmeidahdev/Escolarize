@@ -38,7 +38,10 @@ const HomeView = (function () {
       '<div class="home-columns">' +
       '<aside class="home-aside" aria-label="Mapa e segurança">' +
       '<div class="home-map-wrap">' +
+      '<button type="button" class="home-map-btn" id="open-map-btn" aria-label="Abrir mapa completo de São José dos Campos">' +
       Components.renderMap({ variant: "home" }) +
+      '<span class="home-map-cta">' + icon("compass") + "Ver mapa completo</span>" +
+      "</button>" +
       "</div>" +
 
       '<button type="button" class="safety-banner" id="safety-info-btn">' +
@@ -147,6 +150,10 @@ const HomeView = (function () {
   function mount() {
     document.getElementById("choose-school-btn").addEventListener("click", () => {
       AppNav.switchView("schools");
+    });
+
+    document.getElementById("open-map-btn").addEventListener("click", () => {
+      AppNav.switchView("map", { mode: "school" });
     });
 
     document.getElementById("safety-info-btn").addEventListener("click", openSecurityModal);

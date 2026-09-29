@@ -43,6 +43,11 @@ const SchoolsView = (function () {
       icon("search", "search-field-icon") +
       '<input type="search" id="school-search-input" placeholder="Pesquisar escola" aria-label="Pesquisar escola">' +
       "</label>" +
+      '<button type="button" class="map-shortcut-btn" id="open-map-schools-btn">' +
+      icon("compass") +
+      "<span>Escolher pelo mapa</span>" +
+      icon("chevronRight") +
+      "</button>" +
       '<div id="school-list" class="school-list">' + renderSchoolList(SCHOOLS) + "</div>" +
       "</div>"
     );
@@ -50,6 +55,10 @@ const SchoolsView = (function () {
 
   function mountSelectSchool() {
     document.getElementById("topbar-back-btn").addEventListener("click", () => AppNav.back());
+
+    document.getElementById("open-map-schools-btn").addEventListener("click", () => {
+      AppNav.switchView("map", { mode: "school" });
+    });
 
     const input = document.getElementById("school-search-input");
     const list = document.getElementById("school-list");
@@ -94,7 +103,8 @@ const SchoolsView = (function () {
 
   function renderSelectAddress() {
     const school = appState.selectedSchool;
-    const defaultAddress = MockData.user.defaultAddress;
+    // mantém o endereço já escolhido (inclusive o definido pelo mapa)
+    const defaultAddress = appState.selectedAddress || MockData.user.defaultAddress;
 
     return (
       '<div class="view address-view">' +
@@ -111,6 +121,12 @@ const SchoolsView = (function () {
       '<button type="button" class="use-location-btn" id="use-location-btn">' +
       icon("compass") +
       '<span>Usar localização atual</span>' +
+      "</button>" +
+
+      '<button type="button" class="map-shortcut-btn" id="open-map-pickup-btn">' +
+      icon("mapPin") +
+      "<span>Escolher no mapa</span>" +
+      icon("chevronRight") +
       "</button>" +
 
       '<p class="list-subheading">Endereços salvos</p>' +
@@ -162,6 +178,11 @@ const SchoolsView = (function () {
         validate();
         Components.showToast("Localização atual simulada aplicada.", "success");
       }, 900);
+    });
+
+    document.getElementById("open-map-pickup-btn").addEventListener("click", () => {
+      appState.selectedAddress = input.value.trim() || null;
+      AppNav.switchView("map", { mode: "pickup" });
     });
 
     document.querySelectorAll(".saved-address-item").forEach((item) => {

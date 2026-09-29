@@ -54,10 +54,17 @@
 /* ---------- Reset básico ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 
-html, body {
+html {
+  height: 100%;
+}
+
+/* min-height (e não height) para o body crescer com o conteúdo: no desktop o
+   body é flex container e um height fixo esticaria o app em 100vh, deixando o
+   conteúdo mais longo vazar para fora do fundo do aplicativo. */
+body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
@@ -455,6 +462,170 @@ img { max-width: 100%; display: block; }
 }
 .map-label-icon { width: 14px; height: 14px; color: var(--color-primary); }
 
+/* ---------- Mapa real (Leaflet + OpenStreetMap) ---------- */
+.home-map-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  position: relative;
+  border-radius: var(--radius-lg);
+}
+.home-map-cta {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  box-shadow: var(--shadow-md);
+}
+.home-map-cta .icon { width: 16px; height: 16px; }
+
+.map-shortcut-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: calc(100% - 32px);
+  margin: 12px 16px 4px;
+  padding: 12px 14px;
+  background: var(--color-surface);
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.map-shortcut-btn span { flex: 1; text-align: left; }
+.map-shortcut-btn .icon:last-child { color: var(--color-text-secondary); width: 18px; height: 18px; }
+
+.map-mode-switch {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px;
+}
+.map-mode-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 10px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+}
+.map-mode-btn .icon { width: 17px; height: 17px; }
+.map-mode-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.map-hint {
+  margin: 10px 16px;
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.map-canvas-wrap {
+  position: relative;
+  margin: 0 16px;
+}
+.map-canvas {
+  height: 52vh;
+  min-height: 320px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-map-bg);
+  box-shadow: var(--shadow-sm);
+  z-index: 0;
+}
+.map-fit-btn {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 500;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-loading {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  text-align: center;
+  padding: 24px;
+}
+.map-loading-error .icon { width: 28px; height: 28px; color: var(--color-danger); }
+
+/* marcadores customizados */
+.map-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  border: 3px solid #fff;
+  box-shadow: 0 3px 10px rgba(11, 42, 88, 0.35);
+}
+.map-marker svg { width: 18px; height: 18px; }
+.map-marker-popular { background: var(--color-dark-blue); }
+.map-marker-pickup { background: var(--color-yellow); color: var(--color-dark-blue); }
+
+.map-popup { display: flex; flex-direction: column; gap: 6px; min-width: 190px; }
+.map-popup-title { font-size: 13.5px; color: var(--color-text); }
+.map-popup-address { font-size: 12px; color: var(--color-text-secondary); }
+.map-popup-btn { min-height: 38px; padding: 8px 14px; font-size: 13px; margin-top: 4px; }
+.map-popup-link { font-size: 12px; font-weight: 700; color: var(--color-primary); text-align: center; }
+
+.leaflet-popup-content-wrapper { border-radius: var(--radius-md); }
+.leaflet-popup-content { margin: 12px 14px; font-family: var(--font-main); }
+.leaflet-container { font-family: var(--font-main); }
+
+.map-selection {
+  margin: 14px 16px 0;
+  padding: 14px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.map-selection-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; }
+.map-selection-row > span { display: flex; flex-direction: column; min-width: 0; }
+.map-selection-row strong { font-size: 11.5px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
+.map-selection-icon { color: var(--color-primary); margin-top: 2px; }
+.map-selection-note { font-size: 12px; color: var(--color-text-secondary); text-align: center; }
+
 /* ---------- Faixa de segurança ---------- */
 .safety-banner {
   display: flex;
@@ -767,6 +938,23 @@ img { max-width: 100%; display: block; }
 .review-row-price span:first-child { font-weight: 700; color: var(--color-text); }
 .review-row-price span:last-child { font-size: 17px; font-weight: 800; color: var(--color-primary); }
 
+.gmaps-route-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 14px 16px 0;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  color: var(--color-primary);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.gmaps-route-link:hover { border-color: var(--color-primary); }
+
 .mock-disclaimer {
   margin: 10px 16px 0;
   font-size: 11.5px;
@@ -844,7 +1032,22 @@ img { max-width: 100%; display: block; }
 .driver-card-name { font-size: 14.5px; font-weight: 700; }
 .driver-card-rating { font-size: 12px; color: var(--color-text-secondary); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
 .driver-card-rating .star-filled { width: 13px; height: 13px; color: var(--color-yellow-dark); }
+.driver-card-name { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.driver-card-role-detail { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; }
 .driver-card-vehicle { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+
+/* vínculo do motorista com a escola (pai/mãe de aluno ou professor) */
+.badge-role { font-size: 10.5px; margin-left: 4px; }
+.badge-role-responsavel { background: rgba(255, 210, 63, 0.3); color: #7A5C00; }
+.badge-role-professor { background: rgba(25, 118, 210, 0.14); color: var(--color-primary); }
+:root[data-theme="dark"] .badge-role-responsavel { color: var(--color-yellow); }
+
+.ride-card-driver-role {
+  display: block;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  margin-top: 1px;
+}
 .driver-contact-btn { color: var(--color-primary); }
 
 .progress-track {
@@ -861,16 +1064,6 @@ img { max-width: 100%; display: block; }
   background: linear-gradient(90deg, var(--color-primary), var(--color-light-blue));
   border-radius: var(--radius-full);
   transition: width linear;
-}
-
-.dev-skip-btn {
-  margin-top: 12px;
-  background: none;
-  border: none;
-  font-size: 11.5px;
-  color: var(--color-text-secondary);
-  opacity: 0.55;
-  text-decoration: underline;
 }
 
 /* ---------- Corrida concluída ---------- */

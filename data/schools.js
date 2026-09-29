@@ -1,7 +1,12 @@
 /**
  * Escolarize — dados mock de escolas de São José dos Campos - SP.
  * Dados fictícios utilizados apenas para fins de protótipo/demonstração.
- * Coordenadas e distâncias são simuladas (não representam geolocalização real).
+ *
+ * - coords { x, y }: posição em % usada no mapa ilustrativo (simulado).
+ * - lat / lng: coordenadas APROXIMADAS do bairro, usadas para posicionar o
+ *   marcador no mapa real. São estimativas de protótipo, não o endereço
+ *   exato conferido de cada escola.
+ * - distanceKm / etaMin: valores simulados.
  */
 
 const SCHOOLS = [
@@ -16,7 +21,9 @@ const SCHOOLS = [
     popular: true,
     distanceKm: 6.4,
     etaMin: 14,
-    coords: { x: 66, y: 32 }
+    coords: { x: 66, y: 32 },
+    lat: -23.2085,
+    lng: -45.903
   },
   {
     id: 2,
@@ -29,7 +36,9 @@ const SCHOOLS = [
     popular: true,
     distanceKm: 6.9,
     etaMin: 15,
-    coords: { x: 60, y: 40 }
+    coords: { x: 60, y: 40 },
+    lat: -23.2126,
+    lng: -45.9002
   },
   {
     id: 3,
@@ -42,7 +51,9 @@ const SCHOOLS = [
     popular: true,
     distanceKm: 5.1,
     etaMin: 12,
-    coords: { x: 72, y: 26 }
+    coords: { x: 72, y: 26 },
+    lat: -23.2247,
+    lng: -45.9046
   },
   {
     id: 4,
@@ -55,7 +66,9 @@ const SCHOOLS = [
     popular: true,
     distanceKm: 4.3,
     etaMin: 10,
-    coords: { x: 50, y: 48 }
+    coords: { x: 50, y: 48 },
+    lat: -23.2012,
+    lng: -45.8938
   },
   {
     id: 5,
@@ -68,7 +81,9 @@ const SCHOOLS = [
     popular: false,
     distanceKm: 5.6,
     etaMin: 13,
-    coords: { x: 76, y: 36 }
+    coords: { x: 76, y: 36 },
+    lat: -23.2268,
+    lng: -45.9012
   },
   {
     id: 6,
@@ -81,7 +96,9 @@ const SCHOOLS = [
     popular: false,
     distanceKm: 2.1,
     etaMin: 7,
-    coords: { x: 32, y: 58 }
+    coords: { x: 32, y: 58 },
+    lat: -23.1902,
+    lng: -45.8862
   },
   {
     id: 7,
@@ -94,7 +111,9 @@ const SCHOOLS = [
     popular: false,
     distanceKm: 7.8,
     etaMin: 18,
-    coords: { x: 18, y: 68 }
+    coords: { x: 18, y: 68 },
+    lat: -23.2098,
+    lng: -45.8712
   },
   {
     id: 8,
@@ -107,7 +126,9 @@ const SCHOOLS = [
     popular: false,
     distanceKm: 8.5,
     etaMin: 20,
-    coords: { x: 14, y: 76 }
+    coords: { x: 14, y: 76 },
+    lat: -23.2041,
+    lng: -45.8767
   },
   {
     id: 9,
@@ -120,7 +141,9 @@ const SCHOOLS = [
     popular: false,
     distanceKm: 2.6,
     etaMin: 8,
-    coords: { x: 34, y: 54 }
+    coords: { x: 34, y: 54 },
+    lat: -23.1975,
+    lng: -45.8893
   },
   {
     id: 10,
@@ -133,6 +156,8 @@ const SCHOOLS = [
     popular: false,
     distanceKm: 1.8,
     etaMin: 6,
-    coords: { x: 26, y: 62 }
+    coords: { x: 26, y: 62 },
+    lat: -23.1802,
+    lng: -45.8868
   }
 ];

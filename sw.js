@@ -7,7 +7,7 @@
 
 // Incrementar a versão sempre que CSS/JS mudarem: o fetch é cache-first e o
 // cache antigo é apagado no activate.
-const CACHE_NAME = "escolarize-cache-v2";
+const CACHE_NAME = "escolarize-cache-v6";
 
 const PRECACHE_URLS = [
   "./",
@@ -18,6 +18,8 @@ const PRECACHE_URLS = [
   "./js/storage.js",
   "./js/mockData.js",
   "./js/components.js",
+  "./js/map.js",
+  "./js/mapView.js",
   "./js/home.js",
   "./js/schools.js",
   "./js/rides.js",
@@ -28,7 +30,14 @@ const PRECACHE_URLS = [
   "./data/schools.js",
   "./assets/icons/favicon.svg",
   "./assets/icons/icon-192.svg",
-  "./assets/icons/icon-512.svg"
+  "./assets/icons/icon-512.svg",
+  // biblioteca de mapa local: a interface do mapa abre offline
+  // (apenas os tiles do OpenStreetMap exigem conexão)
+  "./assets/vendor/leaflet/leaflet.css",
+  "./assets/vendor/leaflet/leaflet.js",
+  "./assets/vendor/leaflet/images/marker-icon.png",
+  "./assets/vendor/leaflet/images/marker-icon-2x.png",
+  "./assets/vendor/leaflet/images/marker-shadow.png"
 ];
 
 self.addEventListener("install", (event) => {

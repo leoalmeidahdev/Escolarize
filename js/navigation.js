@@ -74,6 +74,10 @@ const AppNav = (function () {
         container.innerHTML = ProfileView.renderFavorites();
         ProfileView.mountFavorites();
         break;
+      case "map":
+        container.innerHTML = MapView.render();
+        MapView.mount();
+        break;
       default:
         container.innerHTML = HomeView.render();
         HomeView.mount();
@@ -117,7 +121,7 @@ const AppNav = (function () {
 
   // Views que podem ser abertas diretamente pela URL (não dependem de estado
   // temporário como escola/endereço/corrida em andamento).
-  const DEEP_LINKABLE = ["home", "history", "schedule", "newSchedule", "profile", "favorites", "schools"];
+  const DEEP_LINKABLE = ["home", "history", "schedule", "newSchedule", "profile", "favorites", "schools", "map"];
 
   function initialView() {
     const hash = (location.hash || "").replace("#", "");
@@ -131,13 +135,16 @@ const AppNav = (function () {
       renderView(view);
     });
 
-    // hash digitado/colado manualmente (pushState não dispara hashchange)
+    // Hash digitado/colado manualmente. pushState não dispara hashchange, mas
+    // popstate dispara: por isso ignoramos quando o hash já corresponde à view
+    // atual (mudança causada pelo próprio app) e quando o hash aponta para uma
+    // view de fluxo, que depende de estado e não pode ser aberta direto.
     window.addEventListener("hashchange", () => {
-      const view = initialView();
-      if (view !== appState.currentView) {
-        appState.currentView = view;
-        renderView(view);
-      }
+      const hash = (location.hash || "").replace("#", "");
+      if (hash === appState.currentView) return;
+      if (!DEEP_LINKABLE.includes(hash)) return;
+      appState.currentView = hash;
+      renderView(hash);
     });
 
     const view = initialView();
