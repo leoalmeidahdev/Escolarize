@@ -203,6 +203,24 @@ const Components = (function () {
   // As vias e a rota ficam no SVG (com vector-effect para o traço não deformar);
   // pinos e carro são elementos HTML posicionados em %, assim continuam
   // perfeitamente redondos em qualquer proporção de tela.
+  /** "Colégio Poliedro – Unidade Aquarius" → "Colégio Poliedro" */
+  function shortSchoolName(name) {
+    return name.split("–")[0].trim();
+  }
+
+  /** Vaninha amarela que aparece no mapa ilustrativo da Home. */
+  function busMarker() {
+    return (
+      '<svg viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+      '<rect x="1" y="3" width="32" height="15" rx="4" fill="#FFC42E"/>' +
+      '<rect x="4.5" y="6" width="7" height="6" rx="1.6" fill="#EAF4FF"/>' +
+      '<rect x="14" y="6" width="7" height="6" rx="1.6" fill="#EAF4FF"/>' +
+      '<rect x="23.5" y="6" width="6" height="6" rx="1.6" fill="#EAF4FF"/>' +
+      '<circle cx="9" cy="19" r="3.2" fill="#20304A"/><circle cx="26" cy="19" r="3.2" fill="#20304A"/>' +
+      "</svg>"
+    );
+  }
+
   function dot(cls, coords, extraAttr) {
     return (
       '<span class="map-dot ' + cls + '" style="left:' + coords.x + "%;top:" + coords.y + '%"' +
@@ -217,21 +235,45 @@ const Components = (function () {
     const destLabel = opts.destLabel || "";
     const originCoords = opts.originCoords || { x: 40, y: 82 };
 
+    // ruas, quarteirões e áreas verdes do mapa ilustrativo
+    const parks =
+      '<path class="map-park" d="M2,4 h26 v18 h-26z" />' +
+      '<path class="map-park" d="M70,66 h26 v28 h-26z" />';
+
     const roads =
-      '<path class="map-road" d="M0,70 C 20,60 35,75 55,55 S 85,40 100,45" />' +
-      '<path class="map-road" d="M10,0 C 25,20 15,40 35,50 S 70,60 65,100" />' +
-      '<path class="map-road" d="M0,30 C 30,25 40,15 70,20 S 95,10 100,5" />';
+      '<path class="map-road map-road-main" d="M0,70 C 20,60 35,75 55,55 S 85,40 100,45" />' +
+      '<path class="map-road map-road-main" d="M10,0 C 25,20 15,40 35,50 S 70,60 65,100" />' +
+      '<path class="map-road" d="M0,30 C 30,25 40,15 70,20 S 95,10 100,5" />' +
+      '<path class="map-road map-road-thin" d="M0,50 H100" />' +
+      '<path class="map-road map-road-thin" d="M80,0 V100" />' +
+      '<path class="map-road map-road-thin" d="M45,0 V100" />' +
+      '<path class="map-road map-road-thin" d="M0,86 H100" />';
 
     let overlay = "";
     let route = "";
 
     if (variant === "home") {
       overlay += '<span class="map-zone" style="left:' + originCoords.x + "%;top:" + originCoords.y + '%"></span>';
-      SCHOOLS.filter((s) => s.popular)
-        .slice(0, 4)
-        .forEach((s) => {
-          overlay += dot("map-dot-school", s.coords);
-        });
+
+      // duas escolas ganham rótulo, em pontos bem separados para não colidirem
+      const popular = SCHOOLS.filter((s) => s.popular);
+      // nomes curtos distintos: evita dois rótulos "Colégio Poliedro"
+      const labelled = popular.filter(
+        (s, i, arr) => arr.findIndex((o) => shortSchoolName(o.name) === shortSchoolName(s.name)) === i
+      );
+      const labelSpots = [{ x: 30, y: 24 }, { x: 72, y: 58 }];
+      labelled.slice(0, 2).forEach((s, i) => {
+        overlay +=
+          '<span class="map-place" style="left:' + labelSpots[i].x + "%;top:" + labelSpots[i].y + '%">' +
+          '<span class="map-place-pin">' + icon("school") + "</span>" +
+          '<span class="map-place-name">' + escapeHtml(shortSchoolName(s.name)) + "</span>" +
+          "</span>";
+      });
+      popular.slice(2, 4).forEach((s) => {
+        overlay += dot("map-dot-school", s.coords);
+      });
+
+      overlay += '<span class="map-bus" style="left:52%;top:40%">' + busMarker() + "</span>";
       overlay += dot("map-dot-user", originCoords);
     }
 

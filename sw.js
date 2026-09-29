@@ -7,7 +7,7 @@
 
 // Incrementar a versão sempre que CSS/JS mudarem: o fetch é cache-first e o
 // cache antigo é apagado no activate.
-const CACHE_NAME = "escolarize-cache-v8";
+const CACHE_NAME = "escolarize-cache-v9";
 
 const PRECACHE_URLS = [
   "./",

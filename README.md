@@ -14,6 +14,7 @@ O Escolarize simula, de ponta a ponta, a experiência de um aplicativo real de m
 
 - HTML5
 - CSS3 (mobile-first, com suporte a tema claro/escuro)
+- Visual: fundo azul com rabiscos escolares, cards brancos arredondados, destaque em amarelo e navegação flutuante (barra inferior no celular, barra lateral em cartão no desktop)
 - JavaScript (ES6+, vanilla, sem frameworks)
 - `localStorage` para persistência local
 - PWA (manifest + Service Worker)

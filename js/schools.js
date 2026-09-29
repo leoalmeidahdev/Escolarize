@@ -108,7 +108,11 @@ const SchoolsView = (function () {
 
     return (
       '<div class="view address-view">' +
-      Components.renderTopBar({ title: "De onde você vai sair?", subtitle: school ? "Indo para " + school.name : "", back: true }) +
+      Components.renderTopBar({
+        title: "De onde você vai sair?",
+        subtitle: school ? "Indo para " + school.name : "Depois escolha a escola de destino",
+        back: true
+      }) +
       '<div class="address-field">' +
       '<label for="address-input">Endereço de embarque</label>' +
       '<div class="address-input-wrap">' +
@@ -143,7 +147,9 @@ const SchoolsView = (function () {
       "</div>" +
 
       '<div class="sticky-action">' +
-      '<button type="button" class="btn btn-primary btn-block" id="continue-btn" disabled>Continuar</button>' +
+      '<button type="button" class="btn btn-primary btn-block" id="continue-btn" disabled>' +
+      (school ? "Continuar" : "Escolher escola") +
+      "</button>" +
       "</div>" +
       "</div>"
     );
@@ -156,8 +162,10 @@ const SchoolsView = (function () {
     const continueBtn = document.getElementById("continue-btn");
     const errorEl = document.getElementById("address-error");
 
+    // o endereço pode ser definido antes da escola (entrada pela Home):
+    // nesse caso o botão leva para a escolha da escola
     function validate() {
-      const valid = input.value.trim().length > 4 && !!appState.selectedSchool;
+      const valid = input.value.trim().length > 4;
       continueBtn.disabled = !valid;
       return valid;
     }
@@ -198,7 +206,7 @@ const SchoolsView = (function () {
         return;
       }
       appState.selectedAddress = input.value.trim();
-      AppNav.switchView("review");
+      AppNav.switchView(appState.selectedSchool ? "review" : "schools");
     });
 
     validate();
