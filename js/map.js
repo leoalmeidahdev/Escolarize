@@ -172,6 +172,31 @@ const MapService = (function () {
     map.setView([school.lat, school.lng], 16, { animate: true });
   }
 
+  function getCenter() {
+    if (!map) return null;
+    const c = map.getCenter();
+    return { lat: c.lat, lng: c.lng };
+  }
+
+  function panTo(point) {
+    if (!map) return;
+    map.panTo([point.lat, point.lng], { animate: true });
+  }
+
+  /**
+   * No modo de embarque os marcadores de escola ficam inertes ao toque.
+   * Sem isso o navegador "gruda" o toque no marcador mais próximo (touch
+   * adjustment) e o ponto de embarque nunca é marcado.
+   */
+  function setSchoolMarkersInteractive(enabled) {
+    if (!schoolLayer) return;
+    schoolLayer.eachLayer((marker) => {
+      const el = marker.getElement();
+      if (el) el.style.pointerEvents = enabled ? "" : "none";
+      if (!enabled) marker.closePopup();
+    });
+  }
+
   function fitAllSchools() {
     if (!map || !isLoaded()) return;
     const bounds = L.latLngBounds(SCHOOLS.map((s) => [s.lat, s.lng]));
@@ -222,6 +247,9 @@ const MapService = (function () {
     createMap,
     setPickupMarker,
     focusSchool,
+    getCenter,
+    panTo,
+    setSchoolMarkersInteractive,
     fitAllSchools,
     reverseGeocode,
     googleMapsUrl,

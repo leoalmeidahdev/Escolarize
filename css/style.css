@@ -544,18 +544,66 @@ img { max-width: 100%; display: block; }
   margin: 0 16px;
 }
 .map-canvas {
-  height: 52vh;
-  min-height: 320px;
+  height: 46vh;
+  min-height: 300px;
+  max-height: 440px;
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--color-map-bg);
   box-shadow: var(--shadow-sm);
   z-index: 0;
 }
+
+/* dvh acompanha a barra de endereço do navegador no celular */
+@supports (height: 1dvh) {
+  .map-canvas { height: 46dvh; }
+}
+
+/* mira central: arrastar o mapa é mais confiável que acertar um toque */
+.map-center-pin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  color: var(--color-dark-blue);
+  pointer-events: none;
+  z-index: 450;
+  filter: drop-shadow(0 3px 5px rgba(11, 42, 88, 0.35));
+}
+.map-center-pin .icon {
+  width: 38px;
+  height: 38px;
+  fill: var(--color-yellow);
+  stroke-width: 1.6;
+}
+
+/* barra de confirmação sobre o mapa: fica sempre à vista, sem rolar a página */
+.map-pickup-bar {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 26px; /* deixa a atribuição do OpenStreetMap visível */
+  z-index: 500;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.map-pickup-bar p {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 0;
+}
+.map-pickup-bar .btn { min-height: 44px; font-size: 14px; }
+/* canto superior direito: não briga com a barra de confirmação nem com o zoom */
 .map-fit-btn {
   position: absolute;
   right: 12px;
-  bottom: 12px;
+  top: 12px;
   z-index: 500;
   width: 42px;
   height: 42px;

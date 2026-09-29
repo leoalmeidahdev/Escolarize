@@ -7,7 +7,6 @@
 
 const MapView = (function () {
   let mode = "school"; // "school" | "pickup"
-  let pendingPoint = null;
 
   function render() {
     return (
@@ -25,8 +24,20 @@ const MapView = (function () {
 
       '<div class="map-canvas-wrap">' +
       '<div id="real-map" class="map-canvas" role="application" aria-label="Mapa de São José dos Campos com as escolas disponíveis"></div>' +
+
+      // mira central: no celular basta arrastar o mapa e confirmar
+      '<div class="map-center-pin" id="map-center-pin" hidden aria-hidden="true">' +
+      icon("mapPin") +
+      "</div>" +
+
       '<button type="button" class="map-fit-btn" id="map-fit-btn" aria-label="Enquadrar todas as escolas">' +
       icon("compass") + "</button>" +
+
+      // barra de confirmação sobre o mapa — sempre visível, sem precisar rolar
+      '<div class="map-pickup-bar" id="map-pickup-bar" hidden>' +
+      '<p id="map-pickup-hint">Arraste o mapa ou toque para escolher o embarque</p>' +
+      '<button type="button" class="btn btn-primary btn-block" id="confirm-point-btn">Confirmar ponto de embarque</button>' +
+      "</div>" +
       "</div>" +
 
       '<div class="map-selection" id="map-selection"></div>' +
@@ -51,9 +62,6 @@ const MapView = (function () {
       (address ? Components.escapeHtml(address) : Components.escapeHtml(MockData.user.defaultAddress) + " (padrão)") +
       "</span></span>" +
       "</div>" +
-      (pendingPoint
-        ? '<button type="button" class="btn btn-outline btn-block" id="use-point-btn">Usar este ponto como embarque</button>'
-        : "") +
       '<button type="button" class="btn btn-primary btn-block" id="map-continue-btn"' +
       (school ? "" : " disabled") +
       ">Continuar</button>" +
@@ -70,22 +78,32 @@ const MapView = (function () {
     bindSelectionEvents();
   }
 
-  function bindSelectionEvents() {
-    const usePointBtn = document.getElementById("use-point-btn");
-    if (usePointBtn) {
-      usePointBtn.addEventListener("click", () => {
-        if (!pendingPoint) return;
-        usePointBtn.disabled = true;
-        usePointBtn.textContent = "Buscando endereço...";
-        MapService.reverseGeocode(pendingPoint).then((address) => {
-          appState.selectedAddress = address;
-          pendingPoint = null;
-          Components.showToast("Ponto de embarque definido.", "success");
-          updateSelection();
-        });
-      });
+  /** Confirma o ponto sob a mira (centro do mapa). */
+  function confirmPickupPoint() {
+    const point = MapService.getCenter();
+    if (!point) return;
+
+    const btn = document.getElementById("confirm-point-btn");
+    const hint = document.getElementById("map-pickup-hint");
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Buscando endereço...";
     }
 
+    MapService.setPickupMarker(point);
+    MapService.reverseGeocode(point).then((address) => {
+      appState.selectedAddress = address;
+      Components.showToast("Embarque: " + address, "success");
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Confirmar ponto de embarque";
+      }
+      if (hint) hint.textContent = address;
+      updateSelection();
+    });
+  }
+
+  function bindSelectionEvents() {
     const continueBtn = document.getElementById("map-continue-btn");
     if (continueBtn) {
       continueBtn.addEventListener("click", () => {
@@ -108,13 +126,22 @@ const MapView = (function () {
       btn.classList.toggle("active", active);
       btn.setAttribute("aria-selected", String(active));
     });
+
+    const pickup = next === "pickup";
     const hint = document.getElementById("map-hint");
     if (hint) {
-      hint.textContent =
-        next === "school"
-          ? "Toque em uma escola para ver os detalhes e escolhê-la como destino."
-          : "Toque em qualquer ponto do mapa para definir seu local de embarque.";
+      hint.textContent = pickup
+        ? "Arraste o mapa até o local de embarque (ou toque no ponto) e confirme."
+        : "Toque em uma escola para ver os detalhes e escolhê-la como destino.";
     }
+
+    const centerPin = document.getElementById("map-center-pin");
+    if (centerPin) centerPin.hidden = !pickup;
+    const bar = document.getElementById("map-pickup-bar");
+    if (bar) bar.hidden = !pickup;
+
+    // sem isso o toque "gruda" no marcador de escola mais próximo
+    MapService.setSchoolMarkersInteractive(!pickup);
   }
 
   function mount() {
@@ -123,6 +150,8 @@ const MapView = (function () {
     document.querySelectorAll(".map-mode-btn").forEach((btn) => {
       btn.addEventListener("click", () => setMode(btn.dataset.mode));
     });
+
+    document.getElementById("confirm-point-btn").addEventListener("click", confirmPickupPoint);
 
     setMode(appState.viewParams && appState.viewParams.mode === "pickup" ? "pickup" : "school");
     updateSelection();
@@ -150,13 +179,18 @@ const MapView = (function () {
           MapService.focusSchool(school);
           updateSelection();
         },
+        // tocar no mapa move a mira; a confirmação sempre usa o centro,
+        // então existe um único ponto de referência na tela
         onPickPoint: (point) => {
           if (mode !== "pickup") return;
-          pendingPoint = point;
-          MapService.setPickupMarker(point);
-          updateSelection();
+          MapService.panTo(point);
+          const hint = document.getElementById("map-pickup-hint");
+          if (hint) hint.textContent = "Confirme para usar este ponto como embarque";
         }
       });
+
+      // o modo pode ter sido definido antes do mapa existir
+      setMode(mode);
 
       if (appState.selectedSchool && appState.selectedSchool.lat) {
         MapService.focusSchool(appState.selectedSchool);
@@ -168,7 +202,6 @@ const MapView = (function () {
 
     AppNav.registerUnmount(() => {
       MapService.destroy();
-      pendingPoint = null;
     });
   }
 
