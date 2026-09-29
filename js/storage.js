@@ -9,7 +9,8 @@ const Storage = (function () {
     HISTORY: "escolarize_rideHistory",
     SCHEDULED: "escolarize_scheduledRides",
     PREFERENCES: "escolarize_preferences",
-    LAST_SCHOOL: "escolarize_lastSelectedSchool"
+    LAST_SCHOOL: "escolarize_lastSelectedSchool",
+    USER_NAME: "escolarize_userName"
   };
 
   function readJSON(key, fallback) {
@@ -116,6 +117,16 @@ const Storage = (function () {
     return writeJSON(KEYS.PREFERENCES, prefs);
   }
 
+  // ---- Nome escolhido pelo usuário ----
+  function loadUserName() {
+    const name = readJSON(KEYS.USER_NAME, null);
+    return typeof name === "string" && name.trim() ? name.trim() : null;
+  }
+
+  function saveUserName(name) {
+    return writeJSON(KEYS.USER_NAME, String(name || "").trim());
+  }
+
   // ---- Última escola selecionada ----
   function loadLastSchool() {
     return readJSON(KEYS.LAST_SCHOOL, null);
@@ -141,6 +152,8 @@ const Storage = (function () {
     removeScheduledRide,
     loadPreferences,
     savePreferences,
+    loadUserName,
+    saveUserName,
     loadLastSchool,
     saveLastSchool
   };

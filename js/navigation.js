@@ -78,6 +78,10 @@ const AppNav = (function () {
         container.innerHTML = MapView.render();
         MapView.mount();
         break;
+      case "welcome":
+        container.innerHTML = WelcomeView.render();
+        WelcomeView.mount();
+        break;
       default:
         container.innerHTML = HomeView.render();
         HomeView.mount();
@@ -98,6 +102,13 @@ const AppNav = (function () {
     const showNav = TABS.includes(view);
     nav.classList.toggle("bottom-nav-hidden", !showNav);
     document.body.classList.toggle("has-bottom-nav", showNav);
+
+    // na tela de boas-vindas a navegação some por completo (inclusive a
+    // barra lateral do desktop, que normalmente continua visível)
+    const isWelcome = view === "welcome";
+    document.body.classList.toggle("is-welcome", isWelcome);
+    const shell = document.getElementById("app");
+    if (shell) shell.classList.toggle("is-welcome", isWelcome);
     nav.querySelectorAll(".nav-item").forEach((btn) => {
       const active = btn.dataset.view === view;
       btn.classList.toggle("active", active);
@@ -123,7 +134,8 @@ const AppNav = (function () {
   // temporário como escola/endereço/corrida em andamento).
   const DEEP_LINKABLE = ["home", "history", "schedule", "newSchedule", "profile", "favorites", "schools", "map"];
 
-  function initialView() {
+  /** View pedida pela URL (independente de já haver nome definido). */
+  function requestedView() {
     const hash = (location.hash || "").replace("#", "");
     return DEEP_LINKABLE.includes(hash) ? hash : "home";
   }
@@ -140,6 +152,7 @@ const AppNav = (function () {
     // atual (mudança causada pelo próprio app) e quando o hash aponta para uma
     // view de fluxo, que depende de estado e não pode ser aberta direto.
     window.addEventListener("hashchange", () => {
+      if (!Storage.loadUserName()) return; // ainda nas boas-vindas
       const hash = (location.hash || "").replace("#", "");
       if (hash === appState.currentView) return;
       if (!DEEP_LINKABLE.includes(hash)) return;
@@ -147,9 +160,15 @@ const AppNav = (function () {
       renderView(hash);
     });
 
-    const view = initialView();
+    // o destino pedido na URL é preservado durante as boas-vindas e aberto
+    // assim que o nome é escolhido
+    const target = requestedView();
+    const needsName = !Storage.loadUserName();
+    const view = needsName ? "welcome" : target;
+
+    appState.pendingView = target;
     appState.currentView = view;
-    history.replaceState({ view: view }, "", "#" + view);
+    history.replaceState({ view: view }, "", "#" + target);
     renderView(view);
   }
 

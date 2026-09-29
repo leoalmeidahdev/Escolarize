@@ -14,6 +14,33 @@ const appState = {
 };
 
 const App = (function () {
+  /** Nome escolhido pelo usuário; cai no mock enquanto nada foi definido. */
+  function getUserName() {
+    return Storage.loadUserName() || MockData.user.name;
+  }
+
+  function getUserInitials() {
+    const name = getUserName().trim();
+    return name ? name.charAt(0).toUpperCase() : MockData.user.initials;
+  }
+
+  /**
+   * E-mail fictício derivado do nome escolhido: "Ana Clara" → ana.clara@email.com.
+   * Acentos são removidos e só letras/números sobram no endereço.
+   */
+  function getUserEmail() {
+    const slug = getUserName()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // remove acentos
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, "")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .join(".");
+    return (slug || "usuario") + "@email.com";
+  }
+
   function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
   }
@@ -47,7 +74,7 @@ const App = (function () {
     registerServiceWorker();
   }
 
-  return { applyTheme, init };
+  return { applyTheme, init, getUserName, getUserInitials, getUserEmail };
 })();
 
 document.addEventListener("DOMContentLoaded", App.init);

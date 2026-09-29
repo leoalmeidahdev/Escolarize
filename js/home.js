@@ -23,9 +23,9 @@ const HomeView = (function () {
       '<div class="view home-view">' +
       '<header class="home-header">' +
       '<div class="home-header-user">' +
-      '<span class="avatar avatar-md">' + Components.escapeHtml(MockData.user.initials) + "</span>" +
+      '<span class="avatar avatar-md">' + Components.escapeHtml(App.getUserInitials()) + "</span>" +
       '<div>' +
-      '<p class="home-header-greeting">' + greeting() + ", " + Components.escapeHtml(MockData.user.name) + " 👋</p>" +
+      '<p class="home-header-greeting">' + greeting() + ", " + Components.escapeHtml(App.getUserName()) + "</p>" +
       '<p class="home-header-sub">Para onde vamos hoje?</p>' +
       "</div>" +
       "</div>" +

@@ -78,6 +78,11 @@
   /* nas telas de fluxo a navegação continua visível no desktop */
   .bottom-nav-hidden { display: flex; }
 
+  /* exceto nas boas-vindas: o app ainda nem começou */
+  .app-shell.is-welcome { grid-template-columns: minmax(0, 1fr); }
+  body.is-welcome .bottom-nav { display: none; }
+  .app-shell.is-welcome .view-root { grid-column: 1; }
+
   .nav-item {
     flex: none;
     flex-direction: row;

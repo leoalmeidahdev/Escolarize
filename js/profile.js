@@ -14,9 +14,9 @@ const ProfileView = (function () {
       Components.renderTopBar({ title: "Perfil" }) +
 
       '<div class="profile-hero">' +
-      '<span class="avatar avatar-xl">' + Components.escapeHtml(MockData.user.initials) + "</span>" +
-      "<h2>" + Components.escapeHtml(MockData.user.name) + "</h2>" +
-      "<p>" + Components.escapeHtml(MockData.user.email) + "</p>" +
+      '<span class="avatar avatar-xl">' + Components.escapeHtml(App.getUserInitials()) + "</span>" +
+      "<h2>" + Components.escapeHtml(App.getUserName()) + "</h2>" +
+      "<p>" + Components.escapeHtml(App.getUserEmail()) + "</p>" +
       "<p>" + Components.escapeHtml(MockData.user.phone) + "</p>" +
       "</div>" +
 
@@ -34,6 +34,11 @@ const ProfileView = (function () {
 
       '<div class="profile-preferences">' +
       "<h3>Preferências</h3>" +
+      '<div class="preference-row">' +
+      "<span>Nome</span>" +
+      '<button type="button" class="preference-link" id="change-name-btn">' +
+      Components.escapeHtml(App.getUserName()) + " · Alterar</button>" +
+      "</div>" +
       '<div class="preference-row">' +
       "<span>Tema escuro</span>" +
       '<button type="button" class="switch ' + (prefs.theme === "dark" ? "switch-on" : "") + '" id="theme-switch" role="switch" aria-checked="' + (prefs.theme === "dark") + '" aria-label="Alternar tema escuro"><span class="switch-thumb"></span></button>' +
@@ -75,10 +80,45 @@ const ProfileView = (function () {
     });
   }
 
+  function openNameModal() {
+    Components.openModal({
+      title: "Alterar nome",
+      bodyHtml:
+        '<label class="modal-label" for="profile-name-input">Como podemos te chamar?</label>' +
+        '<input type="text" id="profile-name-input" class="modal-input" maxlength="24" value="' +
+        Components.escapeHtml(App.getUserName()) + '">' +
+        '<p class="field-error" id="profile-name-error" hidden>Digite um nome com pelo menos 2 letras.</p>',
+      actions: [
+        { label: "Cancelar", variant: "outline" },
+        {
+          label: "Salvar",
+          variant: "primary",
+          closeOnClick: false,
+          onClick: () => {
+            const input = document.getElementById("profile-name-input");
+            const error = document.getElementById("profile-name-error");
+            const name = input.value.trim();
+            if (name.length < 2) {
+              error.hidden = false;
+              input.focus();
+              return;
+            }
+            Storage.saveUserName(name);
+            Components.closeModal();
+            Components.showToast("Nome atualizado para " + name + ".", "success");
+            AppNav.switchView("profile", {}, { silent: true });
+          }
+        }
+      ]
+    });
+  }
+
   function mount() {
     document.querySelectorAll(".profile-menu-item[data-action]").forEach((btn) => {
       btn.addEventListener("click", () => AppNav.switchView(btn.dataset.action));
     });
+
+    document.getElementById("change-name-btn").addEventListener("click", openNameModal);
 
     document.getElementById("help-btn").addEventListener("click", openHelpModal);
     document.getElementById("about-btn").addEventListener("click", openAboutModal);

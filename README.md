@@ -37,6 +37,7 @@ Nenhuma dependência de backend, banco de dados, login ou API paga é utilizada.
 ├── js/
 │   ├── app.js              # inicialização, estado global, tema, service worker
 │   ├── navigation.js       # roteador de views (SPA) e navegação inferior
+│   ├── welcome.js           # boas-vindas: escolha do nome na primeira entrada
 │   ├── map.js               # camada de mapa real (Leaflet/OSM, provedor trocável)
 │   ├── mapView.js           # tela de mapa: escolher escola / definir embarque
 │   ├── home.js              # tela inicial
@@ -78,13 +79,15 @@ Home → Escolher escola → Escolher endereço → Revisar corrida → Solicita
   → Corrida iniciada → Em andamento → Chegou à escola → Concluída → Histórico
 ```
 
-Não existe tela de login: o app abre diretamente na Home com um usuário mockado (Leonardo).
+Na primeira vez, o app mostra uma tela de boas-vindas onde a pessoa escolhe como quer ser chamada. O nome fica salvo no `localStorage` (`escolarize_userName`), aparece na saudação da Home e no Perfil, e pode ser trocado em **Perfil → Preferências → Nome**. Se a URL tinha um destino (ex.: `#schedule`), ele é aberto assim que o nome é definido.
+
+Isso **não é login**: não há senha, conta, autenticação ou validação de identidade — apenas uma preferência local. O e-mail exibido no Perfil é gerado a partir do nome escolhido (`App.getUserEmail()`), então acompanha qualquer troca; o telefone segue mockado.
 
 ## Dados mockados
 
 Todos os dados abaixo são fictícios e existem apenas para demonstrar o protótipo:
 
-- **Usuário**: Leonardo (nome, e-mail e telefone fictícios).
+- **Usuário**: o nome é escolhido pela própria pessoa na tela de boas-vindas (o mock "Leonardo" é só o padrão enquanto nada foi definido); o e-mail é derivado do nome (`Ana Clara` → `ana.clara@email.com`) e o telefone segue fictício.
 - **Motoristas**: elenco de 6 motoristas fictícios em `MockData.drivers`. Cada um representa alguém da comunidade escolar que **já faz o trajeto todo dia** — 3 responsáveis (pai/mãe de aluno) e 3 professores — e leva estudantes como renda extra. Cada registro traz `roleType` (`responsavel` | `professor`), `role` (rótulo exibido) e `roleDetail` (vínculo com a escola), além de veículo, cor, placa, avaliação, corridas e tempo de chegada. A cada corrida solicitada, um deles é sorteado por `MockData.getRandomDriver()` e fica guardado na própria corrida — por isso o histórico mantém o motorista de cada viagem.
 - **Escolas**: 10 escolas de São José dos Campos com endereço, bairro e coordenadas simuladas de mapa, em `data/schools.js`.
 - **Preço e distância**: calculados por uma fórmula simples e claramente fictícia (`RidesView.computePrice`), sem relação com valores reais.
@@ -99,7 +102,7 @@ Além do mapa ilustrativo da Home, o app tem uma tela de **Mapa** com um mapa re
 - ver a região inteira, com zoom e arrasto;
 - visualizar as 10 escolas como marcadores;
 - tocar em uma escola para ver nome/endereço e **escolhê-la como destino**;
-- alternar para o modo **“Definir embarque”** e tocar em qualquer ponto do mapa para definir o local de embarque;
+- alternar para o modo **“Definir embarque”**: uma mira fica fixa no centro do mapa, a pessoa arrasta o mapa (ou toca num ponto, que recentraliza a mira) e confirma pelo botão que flutua sobre o mapa — padrão pensado para o toque em celular, sem depender de acertar um alvo pequeno;
 - abrir a escola ou o trajeto completo no **Google Maps** (links externos, sem chave).
 
 Entradas para o mapa: botão “Ver mapa completo” na Home, “Escolher pelo mapa” na lista de escolas e “Escolher no mapa” na tela de endereço.
@@ -130,6 +133,7 @@ Toda persistência do protótipo é local, centralizada em `js/storage.js`:
 | `escolarize_rideHistory`       | Histórico de corridas concluídas   |
 | `escolarize_scheduledRides`    | Agendamentos criados               |
 | `escolarize_preferences`       | Tema e preferência de notificações |
+| `escolarize_userName`          | Nome escolhido pelo usuário        |
 | `escolarize_lastSelectedSchool`| Última escola selecionada          |
 
 Os dados permanecem no navegador entre sessões (até que o usuário limpe os dados do site) e não são enviados a nenhum servidor.

@@ -338,6 +338,90 @@ img { max-width: 100%; display: block; }
 .topbar-back { background: var(--color-surface); }
 .topbar-tracking .topbar-titles h1 { font-size: 17px; }
 
+/* ---------- Boas-vindas (escolha do nome) ---------- */
+.welcome-view {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px calc(32px + var(--safe-bottom));
+}
+.welcome-content {
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+.welcome-logo {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 20px;
+  border-radius: 26px;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 26px rgba(25, 118, 210, 0.32);
+}
+.welcome-logo .icon { width: 42px; height: 42px; }
+.welcome-content h1 { font-size: 23px; line-height: 1.25; }
+.welcome-subtitle {
+  margin-top: 10px;
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+.welcome-form {
+  margin-top: 28px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.welcome-form label { font-size: 13px; font-weight: 700; }
+.welcome-form input {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  outline: none;
+}
+.welcome-form input:focus { border-color: var(--color-primary); }
+.welcome-form .btn { margin-top: 8px; }
+.welcome-view .prototype-notice { margin: 24px 0 0; }
+
+/* rótulo/campo dentro do modal (alterar nome) */
+.modal-label { display: block; font-size: 13px; font-weight: 700; color: var(--color-text); margin-bottom: 8px; }
+.modal-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  outline: none;
+}
+.modal-input:focus { border-color: var(--color-primary); }
+
+.preference-link {
+  border: none;
+  background: none;
+  /* alvo de toque confortável sem mudar o alinhamento da linha */
+  padding: 12px 0;
+  margin: -12px 0;
+  min-height: 44px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-align: right;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ---------- Home: cabeçalho ---------- */
 .home-header {
   display: flex;
