@@ -1,5 +1,5 @@
 /**
- * Escolarize — Service Worker
+ * RotaEdu — Service Worker
  * Cache básico da estrutura principal para permitir funcionamento offline.
  * O site funciona normalmente sem a instalação como PWA; o SW é apenas um
  * reforço de performance/offline.
@@ -7,7 +7,7 @@
 
 // Incrementar a versão sempre que CSS/JS mudarem: o fetch é cache-first e o
 // cache antigo é apagado no activate.
-const CACHE_NAME = "escolarize-cache-v9";
+const CACHE_NAME = "rotaedu-cache-v9";
 
 const PRECACHE_URLS = [
   "./",

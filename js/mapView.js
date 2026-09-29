@@ -1,5 +1,5 @@
 /**
- * Escolarize — tela de mapa completo.
+ * RotaEdu — tela de mapa completo.
  *
  * Dois modos: escolher a escola de destino (clicando nos marcadores) ou
  * definir o ponto de embarque (clicando em qualquer lugar do mapa).

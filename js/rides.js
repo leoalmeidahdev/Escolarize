@@ -1,5 +1,5 @@
 /**
- * Escolarize — fluxo de corridas: revisão, solicitação, acompanhamento (mock),
+ * RotaEdu — fluxo de corridas: revisão, solicitação, acompanhamento (mock),
  * conclusão e histórico. Preço/tempo/motorista são inteiramente simulados.
  *
  * Funções separadas (createRide, findDriver via timers, updateStatus, completeRide)

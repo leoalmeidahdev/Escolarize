@@ -1,5 +1,5 @@
 /**
- * Escolarize — dados mock de escolas de São José dos Campos - SP.
+ * RotaEdu — dados mock de escolas de São José dos Campos - SP.
  * Dados fictícios utilizados apenas para fins de protótipo/demonstração.
  *
  * - coords { x, y }: posição em % usada no mapa ilustrativo (simulado).

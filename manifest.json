@@ -1,6 +1,6 @@
 {
-  "name": "Escolarize",
-  "short_name": "Escolarize",
+  "name": "RotaEdu",
+  "short_name": "RotaEdu",
   "description": "Solicite corridas escolares para escolas de São José dos Campos.",
   "start_url": "./index.html",
   "scope": "./",

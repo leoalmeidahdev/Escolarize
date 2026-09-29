@@ -1,5 +1,5 @@
 /**
- * Escolarize — seleção de escola e endereço de embarque.
+ * RotaEdu — seleção de escola e endereço de embarque.
  */
 
 const SchoolsView = (function () {

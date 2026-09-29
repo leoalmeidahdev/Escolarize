@@ -1,5 +1,5 @@
 /**
- * Escolarize — inicialização do app (estado global, tema, service worker,
+ * RotaEdu — inicialização do app (estado global, tema, service worker,
  * navegação inferior).
  */
 
@@ -59,7 +59,7 @@ const App = (function () {
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("sw.js").catch((err) => {
-          console.warn("Escolarize: falha ao registrar o service worker.", err);
+          console.warn("RotaEdu: falha ao registrar o service worker.", err);
         });
       });
     }

@@ -1,5 +1,5 @@
 /**
- * Escolarize — tela de boas-vindas.
+ * RotaEdu — tela de boas-vindas.
  * Aparece apenas na primeira vez, para o usuário escolher como quer ser
  * chamado. O nome fica no localStorage e pode ser alterado no Perfil.
  * Não é login: não há senha, conta ou validação de identidade.
@@ -13,7 +13,7 @@ const WelcomeView = (function () {
       '<div class="view welcome-view">' +
       '<div class="welcome-content">' +
       '<div class="welcome-logo">' + icon("school") + "</div>" +
-      "<h1>Bem-vindo ao Escolarize</h1>" +
+      "<h1>Bem-vindo ao RotaEdu</h1>" +
       "<p class=\"welcome-subtitle\">Caronas escolares em São José dos Campos, com quem já faz o mesmo trajeto todo dia.</p>" +
 
       '<form id="welcome-form" class="welcome-form" novalidate>' +

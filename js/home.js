@@ -1,5 +1,5 @@
 /**
- * Escolarize — tela inicial (Home).
+ * RotaEdu — tela inicial (Home).
  */
 
 const HomeView = (function () {
@@ -181,7 +181,7 @@ const HomeView = (function () {
     Components.openModal({
       title: "Segurança em primeiro lugar",
       bodyHtml:
-        '<p>No Escolarize, segurança é o conceito central da plataforma: motoristas verificados e monitoramento em tempo real fazem parte da proposta do produto.</p>' +
+        '<p>No RotaEdu, segurança é o conceito central da plataforma: motoristas verificados e monitoramento em tempo real fazem parte da proposta do produto.</p>' +
         '<p><strong>Este é um protótipo demonstrativo.</strong> Nenhuma verificação de antecedentes ou monitoramento real está ativa — esses recursos são apresentados apenas conceitualmente.</p>',
       actions: [{ label: "Entendi", variant: "primary" }]
     });

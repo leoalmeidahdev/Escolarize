@@ -1,17 +1,40 @@
 /**
- * Escolarize — camada central de persistência (localStorage).
+ * RotaEdu — camada central de persistência (localStorage).
  * Toda leitura/escrita de dados persistentes do protótipo passa por aqui.
  */
 
 const Storage = (function () {
   const KEYS = {
-    FAVORITES: "escolarize_favoriteSchools",
-    HISTORY: "escolarize_rideHistory",
-    SCHEDULED: "escolarize_scheduledRides",
-    PREFERENCES: "escolarize_preferences",
-    LAST_SCHOOL: "escolarize_lastSelectedSchool",
-    USER_NAME: "escolarize_userName"
+    FAVORITES: "rotaedu_favoriteSchools",
+    HISTORY: "rotaedu_rideHistory",
+    SCHEDULED: "rotaedu_scheduledRides",
+    PREFERENCES: "rotaedu_preferences",
+    LAST_SCHOOL: "rotaedu_lastSelectedSchool",
+    USER_NAME: "rotaedu_userName"
   };
+
+  // O app se chamava "Escolarize": dados salvos com o prefixo antigo são
+  // movidos para o novo na primeira carga, para ninguém perder favoritos,
+  // histórico, agendamentos, nome ou preferências.
+  const LEGACY_PREFIX = "escolarize_";
+  const PREFIX = "rotaedu_";
+
+  function migrateLegacyKeys() {
+    try {
+      Object.keys(KEYS).forEach((name) => {
+        const key = KEYS[name];
+        const legacyKey = key.replace(PREFIX, LEGACY_PREFIX);
+        const legacyValue = localStorage.getItem(legacyKey);
+        if (legacyValue === null) return;
+        if (localStorage.getItem(key) === null) localStorage.setItem(key, legacyValue);
+        localStorage.removeItem(legacyKey);
+      });
+    } catch (err) {
+      console.warn("Storage: falha ao migrar dados do nome antigo.", err);
+    }
+  }
+
+  migrateLegacyKeys();
 
   function readJSON(key, fallback) {
     try {

@@ -1,5 +1,5 @@
 /**
- * Escolarize — perfil do usuário, preferências, favoritos.
+ * RotaEdu — perfil do usuário, preferências, favoritos.
  */
 
 const ProfileView = (function () {
@@ -51,7 +51,7 @@ const ProfileView = (function () {
 
       '<nav class="profile-menu" aria-label="Suporte">' +
       '<button type="button" class="profile-menu-item" id="help-btn">' + icon("info") + "<span>Ajuda</span>" + icon("chevronRight") + "</button>" +
-      '<button type="button" class="profile-menu-item" id="about-btn">' + icon("shield") + "<span>Sobre o Escolarize</span>" + icon("chevronRight") + "</button>" +
+      '<button type="button" class="profile-menu-item" id="about-btn">' + icon("shield") + "<span>Sobre o RotaEdu</span>" + icon("chevronRight") + "</button>" +
       "</nav>" +
 
       '<p class="prototype-notice">Protótipo demonstrativo — funcionalidades de transporte, pagamento e comunicação são simuladas.</p>' +
@@ -72,9 +72,9 @@ const ProfileView = (function () {
 
   function openAboutModal() {
     Components.openModal({
-      title: "Sobre o Escolarize",
+      title: "Sobre o RotaEdu",
       bodyHtml:
-        "<p>Escolarize é uma plataforma de caronas escolares em São José dos Campos - SP. As corridas são oferecidas por pessoas da própria comunidade escolar — responsáveis que já levam os filhos e professores que vão para a mesma escola todo dia — que aproveitam o trajeto para levar outros estudantes e complementar a renda.</p>" +
+        "<p>RotaEdu é uma plataforma de caronas escolares em São José dos Campos - SP. As corridas são oferecidas por pessoas da própria comunidade escolar — responsáveis que já levam os filhos e professores que vão para a mesma escola todo dia — que aproveitam o trajeto para levar outros estudantes e complementar a renda.</p>" +
         "<p><strong>Protótipo demonstrativo</strong> — funcionalidades de transporte, pagamento e comunicação são simuladas. Não há backend, banco de dados ou login real neste projeto.</p>",
       actions: [{ label: "Fechar", variant: "primary" }]
     });

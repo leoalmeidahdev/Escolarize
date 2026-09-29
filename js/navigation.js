@@ -1,5 +1,5 @@
 /**
- * Escolarize — roteador de views (SPA). Controla troca de telas, navegação
+ * RotaEdu — roteador de views (SPA). Controla troca de telas, navegação
  * inferior, transições e integração com o histórico do navegador (back/forward).
  */
 

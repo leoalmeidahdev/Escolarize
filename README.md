@@ -1,4 +1,4 @@
-# Escolarize
+# RotaEdu
 
 Plataforma web de corridas escolares — um protótipo funcional para estudantes e responsáveis solicitarem corridas para escolas de São José dos Campos - SP.
 
@@ -6,7 +6,7 @@ Plataforma web de corridas escolares — um protótipo funcional para estudantes
 
 A proposta: as caronas são oferecidas por pessoas da própria comunidade escolar — responsáveis que já levam os filhos e professores que vão para a mesma escola todos os dias — que aproveitam o trajeto para levar outros estudantes e complementar a renda.
 
-O Escolarize simula, de ponta a ponta, a experiência de um aplicativo real de mobilidade escolar: escolher uma escola, informar o endereço de embarque, revisar e solicitar uma corrida, acompanhar um motorista (mock) até a chegada na escola, concluir a corrida, avaliar o motorista e consultar o histórico. Também é possível favoritar escolas e agendar corridas com antecedência.
+O RotaEdu simula, de ponta a ponta, a experiência de um aplicativo real de mobilidade escolar: escolher uma escola, informar o endereço de embarque, revisar e solicitar uma corrida, acompanhar um motorista (mock) até a chegada na escola, concluir a corrida, avaliar o motorista e consultar o histórico. Também é possível favoritar escolas e agendar corridas com antecedência.
 
 **Este é um protótipo demonstrativo.** Não há backend, banco de dados, autenticação, pagamento real ou comunicação real com motoristas — tudo é simulado no navegador.
 
@@ -80,7 +80,7 @@ Home → Escolher escola → Escolher endereço → Revisar corrida → Solicita
   → Corrida iniciada → Em andamento → Chegou à escola → Concluída → Histórico
 ```
 
-Na primeira vez, o app mostra uma tela de boas-vindas onde a pessoa escolhe como quer ser chamada. O nome fica salvo no `localStorage` (`escolarize_userName`), aparece na saudação da Home e no Perfil, e pode ser trocado em **Perfil → Preferências → Nome**. Se a URL tinha um destino (ex.: `#schedule`), ele é aberto assim que o nome é definido.
+Na primeira vez, o app mostra uma tela de boas-vindas onde a pessoa escolhe como quer ser chamada. O nome fica salvo no `localStorage` (`rotaedu_userName`), aparece na saudação da Home e no Perfil, e pode ser trocado em **Perfil → Preferências → Nome**. Se a URL tinha um destino (ex.: `#schedule`), ele é aberto assim que o nome é definido.
 
 Isso **não é login**: não há senha, conta, autenticação ou validação de identidade — apenas uma preferência local. O e-mail exibido no Perfil é gerado a partir do nome escolhido (`App.getUserEmail()`), então acompanha qualquer troca; o telefone segue mockado.
 
@@ -130,12 +130,12 @@ Toda persistência do protótipo é local, centralizada em `js/storage.js`:
 
 | Chave                          | Conteúdo                          |
 |--------------------------------|------------------------------------|
-| `escolarize_favoriteSchools`   | IDs das escolas favoritadas        |
-| `escolarize_rideHistory`       | Histórico de corridas concluídas   |
-| `escolarize_scheduledRides`    | Agendamentos criados               |
-| `escolarize_preferences`       | Tema e preferência de notificações |
-| `escolarize_userName`          | Nome escolhido pelo usuário        |
-| `escolarize_lastSelectedSchool`| Última escola selecionada          |
+| `rotaedu_favoriteSchools`   | IDs das escolas favoritadas        |
+| `rotaedu_rideHistory`       | Histórico de corridas concluídas   |
+| `rotaedu_scheduledRides`    | Agendamentos criados               |
+| `rotaedu_preferences`       | Tema e preferência de notificações |
+| `rotaedu_userName`          | Nome escolhido pelo usuário        |
+| `rotaedu_lastSelectedSchool`| Última escola selecionada          |
 
 Os dados permanecem no navegador entre sessões (até que o usuário limpe os dados do site) e não são enviados a nenhum servidor.
 

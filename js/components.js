@@ -1,5 +1,5 @@
 /**
- * Escolarize — componentes reutilizáveis, ícones, mapa simulado, toasts e modais.
+ * RotaEdu — componentes reutilizáveis, ícones, mapa simulado, toasts e modais.
  */
 
 const ICONS = {

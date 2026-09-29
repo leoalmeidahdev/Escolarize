@@ -1,5 +1,5 @@
 /**
- * Escolarize — dados fictícios (usuário, motorista, notificações, rotas populares).
+ * RotaEdu — dados fictícios (usuário, motorista, notificações, rotas populares).
  * Nenhum dado aqui é real. Servem apenas para demonstrar o protótipo.
  */
 
@@ -148,7 +148,7 @@ const MockData = {
   notifications: [
     {
       id: "n1",
-      title: "Bem-vindo ao Escolarize!",
+      title: "Bem-vindo ao RotaEdu!",
       body: "Escolha uma escola e solicite sua primeira corrida.",
       time: "09:00",
       read: false

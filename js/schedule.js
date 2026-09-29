@@ -1,5 +1,5 @@
 /**
- * Escolarize — agendamento de corridas.
+ * RotaEdu — agendamento de corridas.
  */
 
 const ScheduleView = (function () {

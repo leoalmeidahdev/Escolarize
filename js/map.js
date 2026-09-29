@@ -1,5 +1,5 @@
 /**
- * Escolarize — mapa real interativo.
+ * RotaEdu — mapa real interativo.
  *
  * Provider atual: Leaflet + OpenStreetMap (sem chave de API, arquivos locais
  * em assets/vendor/leaflet). A camada de acesso é isolada em MapService para
